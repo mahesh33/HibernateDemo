@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 1, 2017 4:24:39 PM by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+	<class name="com.simpleprogrammer.User" table="USERS">
+
+		<id name="id" type="int">
+			<column name="ID" />
+			<generator class="identity" />
+		</id>
+
+		<property name="name" type="java.lang.String">
+			<column name="NAME" />
+		</property>
+
+		<!-- <one-to-one name="proteinData" class="com.simpleprogrammer.ProteinData" 
+			cascade="save-update"></one-to-one> -->
+
+		<!-- column="PROTEIN_DATA_ID" : It's the foreign key, the id comming from 
+			that protein data table. -->
+
+		<!-- unique="true" : It's going to make it so that this is unique even 
+			though this says a many to one mapping, it's going to constrain this with 
+			this unique constraint so that in that table this protein data id to be unique. 
+			It means we're only going to have a one to one mapping. So even though we're 
+			using many to one, we end up creating a one to one. -->
+
+		<many-to-one name="proteinData" class="com.simpleprogrammer.ProteinData"
+			column="PROTEIN_DATA_ID" cascade="save-update" unique="true" />
+
+		<!-- <component name="proteinData"> <property name="total" type="int"> 
+			<column name="TOTAL" /> </property> <property name="goal" type="int"> <column 
+			name="GOAL" /> </property> </component> -->
+
+		<!-- inverse="true" : It tells hibernate, when you have user and user history, 
+			this relationship here is bidirectional so you only need to do an update 
+			on this user id once. -->
+
+		<!-- cascade="save-update" : It makes that, when we save user it'll go 
+			ahead and cascade this entry here of user history, so if we've new userHistory 
+			entities that are attached those will get saced as well. -->
+
+		<list name="history" table="USER_HISTORY" inverse="true" cascade="save-update">
+			<key column="USER_ID" />
+			<list-index column="POSITION" />
+			<one-to-many class="com.simpleprogrammer.UserHistory" />
+		</list>
+
+		<!-- optional="true" : Because we don't always have to have an entry in 
+			here. -->
+
+		<!-- <join table="USER_GOALALERT " optional="true"> <key column="USER_ID" 
+			/> <many-to-one name="goalAlert" column="GOALALERT_ID" not-null="true" unique="true" 
+			cascade="save-update" /> </join> -->
+
+		<set name="goalAlerts" table="USER_GOALALERT" cascade="save-update">
+			<key column="USER_ID" />
+			<many-to-many class="com.simpleprogrammer.GoalAlert"
+				column="GOALALERT_ID" />
+		</set>
+
+		<!-- idbag : It allows us to have a collection of things, they can be duplicated, 
+			they don't have any order -->
+		<!-- <idbag name="history" table="USER_HISTORY"> <collection-id type="int" 
+			column="ID"> <generator class="increment"></generator> </collection-id> <key 
+			column="USER_ID" /> <composite-element class="com.simpleprogrammer.UserHistory"> 
+			<property name="entryTime" type="date" column="ENTRY_TIME"></property> <property 
+			name="entry" type="string" column="ENTRY"></property> </composite-element> 
+			</idbag> -->
+
+		<!-- <map name="history" table="USER_HISTORY"> <key column="ID" /> <map-key 
+			type="string" column="ENTRY_IDENTIFIER" /> <composite-element class="com.simpleprogrammer.UserHistory"> 
+			<property name="entryTime" type="date" column="ENTRY_TIME"></property> <property 
+			name="entry" type="string" column="ENTRY"></property> </composite-element> 
+			</map> -->
+
+		<!-- <list name="history" table="USER_HISTORY"> <key column="ID" /> <list-index 
+			column="POSITION"/> <composite-element class="com.simpleprogrammer.UserHistory"> 
+			<property name="entryTime" type="date" column="ENTRY_TIME"></property> <property 
+			name="entry" type="string" column="ENTRY"></property> </composite-element> 
+			</list> -->
+
+		<!-- <set name="history" table="USER_HISTORY"> <key column="ID" /> <composite-element 
+			class="com.simpleprogrammer.UserHistory"> <property name="entryTime" type="date" 
+			column="ENTRY_TIME"></property> <property name="entry" type="string" column="ENTRY"></property> 
+			</composite-element> </set> -->
+
+	</class>
+</hibernate-mapping>

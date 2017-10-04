@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 2, 2017 1:23:01 PM by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+	<class name="com.simpleprogrammer.ProteinData" table="PROTEINDATA">
+		<!-- <id name="id" type="int"> <column name="ID" /> <generator class="foreign"> 
+			name="property" : It's going to look for the user property on our protein 
+			data and it's going to use that as the id so it's going to get the id from 
+			there. <param name="property">user</param> </generator> </id> -->
+
+		<id name="id" type="int">
+			<column name="ID" />
+			<generator class="increment" />
+		</id>
+
+		<!-- constrained="true" : It's going to make it so that there has to be 
+			exactly one valid user for this for this property, so it does have to map, 
+			it's going to make sure that it's going to check to make sure that this key 
+			is going to match uo so that this protein data will go to a user. -->
+
+		<!-- <one-to-one name="user" class="com.simpleprogrammer.User" constrained="true" 
+			/> -->
+
+		<!-- property-ref="proteinData" : The property this maps to on the user 
+			class which is protein data. -->
+			
+		<one-to-one name="user" class="com.simpleprogrammer.User"
+			property-ref="proteinData" />
+
+		<property name="total" type="int">
+			<column name="TOTAL" />
+		</property>
+		<property name="goal" type="int">
+			<column name="GOAL" />
+		</property>
+	</class>
+</hibernate-mapping>
